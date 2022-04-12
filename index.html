@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Abel&family=Roboto:wght@300&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="styles.css" />
+    <title>Stop watch</title>
+    <style></style>
+  </head>
+  <body>
+    <div class="wrapper">
+      <div class="ball bounce-2"></div>
+      <!-- <div class="ball bounce-2"></div> -->
+      <div class="container">
+        <div>
+          <h1>Stop watch</h1>
+        </div>
+        <div class="watch">
+          <span id="minutes">00</span>:<span id="seconds">00</span>.<span
+            id="nanosec"
+            >00</span
+          >
+        </div>
+        <div class="btn-container">
+          <button type="button" class="btn rest-btn" id="resetBtn">
+            Reset
+          </button>
+          <button type="button" class="btn start-btn" id="startBtn">
+            Start
+          </button>
+          <button type="button" class="btn pause-btn left" id="pauseBtn">
+            Pause
+          </button>
+          <button type="button" class="btn resume-btn left" id="resumeBtn">
+            Resume
+          </button>
+        </div>
+      </div>
+    </div>
+    <script>
+      let startBtn = document.querySelector("#startBtn");
+      let pauseBtn = document.querySelector("#pauseBtn");
+      let resetBtn = document.querySelector("#resetBtn");
+      let resumeBtn = document.querySelector("#resumeBtn");
+      const seconds = document.getElementById("seconds");
+      const minutes = document.getElementById("minutes");
+      const millSecs = document.getElementById("nanosec");
+      let isTicking = false;
+      let interval;
+      let counter = 0;
+
+      counterIncrement = () => {
+        counter++;
+        let mins;
+        let secs
+        let mSecs
+        mSecs = timeDisplay(Math.floor(counter % 100));
+        secs = timeDisplay(Math.floor(counter / 100));
+        mins = timeDisplay(Math.floor(secs / 60));
+        secs = timeDisplay(Math.floor(secs % 60));
+        minutes.innerText = mins;
+        seconds.innerText = secs;
+        millSecs.innerText = mSecs;
+      };
+      startTimer = () => {
+        if (isTicking) return;
+        isTicking = true;
+        interval = setInterval(counterIncrement, 10);
+      };
+      stopTimer = () => {
+        isTicking = false;
+        clearInterval(interval);
+      };
+      startBtn.addEventListener("click", function (e) {
+        startTimer();
+        displayToggler(startBtn, pauseBtn);
+      });
+      pauseBtn.addEventListener("click", function () {
+        stopTimer();
+        displayToggler(pauseBtn, resumeBtn);
+      });
+      resumeBtn.addEventListener("click", function () {
+        startTimer();
+        displayToggler(resumeBtn, pauseBtn);
+      });
+      resetBtn.addEventListener("click", function () {
+        minutes.innerText = `00`;
+        seconds.innerText = `00`;
+        millSecs.innerText = `00`;
+        counter = 0;
+        stopTimer();
+        pauseBtn.style.display = `none`;
+        resumeBtn.style.display = `none`;
+        startBtn.style.display = `block`;
+      });
+
+      displayToggler = (none, block) => {
+        none.style.display = `none`;
+        block.style.display = `block`;
+      };
+      timeDisplay = (num) => {
+        return num < 10 ? `0${num}` : num;
+        console.log(num);
+      };
+    </script>
+  </body>
+</html>
